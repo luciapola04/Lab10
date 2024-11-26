@@ -1,15 +1,19 @@
 package it.unibo.mvc;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
-
 /**
  */
 public final class DrawNumberApp implements DrawNumberViewObserver {
-    private static final int MIN = 0;
-    private static final int MAX = 100;
-    private static final int ATTEMPTS = 10;
+    private static final String FILE_NAME = "config.yml";
+    private static final String MINIMUM = "minimum";
+    private static final String MAXIMUM = "maximum";
+    private static final String ATTEMPTS = "attempts";
 
     private final DrawNumber model;
     private final List<DrawNumberView> views;
@@ -17,8 +21,10 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
     /**
      * @param views
      *            the views to attach
+     * @throws IOException 
+     * @throws FileNotFoundException 
      */
-    public DrawNumberApp(final DrawNumberView... views) {
+    public DrawNumberApp(final DrawNumberView... views) throws FileNotFoundException, IOException {
         /*
          * Side-effect proof
          */
@@ -27,7 +33,34 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
             view.setObserver(this);
             view.start();
         }
-        this.model = new DrawNumberImpl(MIN, MAX, ATTEMPTS);
+
+        int min = 0;
+        int max = 0;
+        int att = 0;
+
+        try (BufferedReader r = new BufferedReader(
+            new InputStreamReader(ClassLoader.getSystemResourceAsStream(FILE_NAME), StandardCharsets.UTF_8))) {
+                String line = r.readLine();
+                while (line != null) {
+                    final String[] divString = line.split(":");
+                    switch (divString[0]) {
+                        case MINIMUM : 
+                            min = Integer.parseInt(divString[1].trim());
+                            break;
+                        case MAXIMUM : 
+                            max = Integer.parseInt(divString[1].trim());
+                            break;
+                        case ATTEMPTS : 
+                            att = Integer.parseInt(divString[1].trim());
+                            break;
+                        default : throw new AssertionError();
+                    }
+                    line = r.readLine();
+                }
+            } catch (final IOException e) {
+                System.out.println(e.getMessage()); //NOPMD
+            }
+        this.model = new DrawNumberImpl(min, max, att);
     }
 
     @Override
@@ -57,16 +90,14 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
          * should be paid to alive threads, as the application would continue to persist
          * until the last thread terminates.
          */
-        System.exit(0);
     }
 
     /**
      * @param args
      *            ignored
-     * @throws FileNotFoundException 
+     * @throws IOException
      */
-    public static void main(final String... args) throws FileNotFoundException {
-        new DrawNumberApp(new DrawNumberViewImpl());
+    public static void main(final String... args) throws IOException {
+        new DrawNumberApp(new DrawNumberViewImpl(), new PrintStreamView(System.out));
     }
-
 }
