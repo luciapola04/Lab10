@@ -2,7 +2,7 @@
 <pmd-cpd xmlns="https://pmd-code.org/schema/cpd-report"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          pmdVersion="7.7.0"
-         timestamp="2024-11-26T18:11:03.8086322+01:00"
+         timestamp="2024-11-27T13:10:40.3879914+01:00"
          version="1.0.0"
          xsi:schemaLocation="https://pmd-code.org/schema/cpd-report https://pmd.github.io/schema/cpd-report_1_0_0.xsd">
    <file path="C:\Users\lucip\Desktop\Lab10\102-advanced-mvc\src\main\java\it\unibo\mvc\Configuration.java"
@@ -10,7 +10,7 @@
    <file path="C:\Users\lucip\Desktop\Lab10\102-advanced-mvc\src\main\java\it\unibo\mvc\DrawNumber.java"
          totalNumberOfTokens="15"/>
    <file path="C:\Users\lucip\Desktop\Lab10\102-advanced-mvc\src\main\java\it\unibo\mvc\DrawNumberApp.java"
-         totalNumberOfTokens="398"/>
+         totalNumberOfTokens="425"/>
    <file path="C:\Users\lucip\Desktop\Lab10\102-advanced-mvc\src\main\java\it\unibo\mvc\DrawNumberImpl.java"
          totalNumberOfTokens="192"/>
    <file path="C:\Users\lucip\Desktop\Lab10\102-advanced-mvc\src\main\java\it\unibo\mvc\DrawNumberView.java"

@@ -34,33 +34,25 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
             view.start();
         }
 
-        int min = 0;
-        int max = 0;
-        int att = 0;
-
+        final Configuration.Builder config = new Configuration.Builder();
         try (BufferedReader r = new BufferedReader(
             new InputStreamReader(ClassLoader.getSystemResourceAsStream(FILE_NAME), StandardCharsets.UTF_8))) {
                 String line = r.readLine();
                 while (line != null) {
                     final String[] divString = line.split(":");
                     switch (divString[0]) {
-                        case MINIMUM : 
-                            min = Integer.parseInt(divString[1].trim());
-                            break;
-                        case MAXIMUM : 
-                            max = Integer.parseInt(divString[1].trim());
-                            break;
-                        case ATTEMPTS : 
-                            att = Integer.parseInt(divString[1].trim());
-                            break;
-                        default : throw new AssertionError();
+                        case MINIMUM -> config.putMin(Integer.parseInt(divString[1].trim()));
+                        case MAXIMUM -> config.putMax(Integer.parseInt(divString[1].trim()));
+                        case ATTEMPTS -> config.putAttempts(Integer.parseInt(divString[1].trim()));
+                        default -> throw new AssertionError();
                     }
                     line = r.readLine();
                 }
             } catch (final IOException e) {
                 System.out.println(e.getMessage()); //NOPMD
             }
-        this.model = new DrawNumberImpl(min, max, att);
+        final Configuration configuration = config.build();
+        this.model = new DrawNumberImpl(configuration.getMin(), configuration.getMax(), configuration.getAttempts());
     }
 
     @Override
